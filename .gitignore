@@ -2,3 +2,4 @@ lab6-cancer-detection/cancer_data/
 Lab 2 - Perceptron/cifar-10-batches-py/
 *.ipynb_checkpoints*
 *tf_logs/
+lab7-wasserstein-GAN/img_align_celeba/
