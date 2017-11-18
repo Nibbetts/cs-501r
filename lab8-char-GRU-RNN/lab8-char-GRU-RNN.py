@@ -1,9 +1,8 @@
-
-
 import tensorflow as tf
 import numpy as np
 from textloader import TextLoader
-from tensorflow.python.ops.rnn_cell import BasicLSTMCell
+from tensorflow.python.ops.rnn_cell import BasicLSTMCell, MultiRNNCell, RNNCell
+from tensorflow.contrib.legacy_seq2seq import rnn_decoder, sequence_loss
 
 
 #
@@ -11,15 +10,15 @@ from tensorflow.python.ops.rnn_cell import BasicLSTMCell
 #
 # Global variables
 
-batch_size = 50
-sequence_length = 50
+batch_size = 50 ###
+sequence_length = 50 ###
 
 data_loader = TextLoader( ".", batch_size, sequence_length )
 
 vocab_size = data_loader.vocab_size  # dimension of one-hot encodings
 state_dim = 128
 
-num_layers = 2
+num_layers = 2 ###
 
 tf.reset_default_graph()
 
@@ -55,35 +54,66 @@ targets = tf.split( targ_ph, sequence_length, axis=1 )
 #   use it to create an initial_state
 #     note that initial_state will be a *list* of tensors!
 
-cell = BasicLSTMCell( state_dim )
-
-
-from tensorflow.python.ops.rnn_cell import RNNCell
-
 class mygru( RNNCell ):
 
-    def __init__( self, ??? ):
-    	pass
+    def __init__( self, num_units ):
+    	self._num_units = num_units
 
     @property
     def state_size(self):
-    	pass
+    	return self._num_units
 
     @property
     def output_size(self):
-    	pass
+    	return self._num_units
 
     def __call__( self, inputs, state, scope=None ):
-    	pass
+    	# x_t = inputs
+        # h_t-1 = state
+        batch_size, input_size = inputs.get_shape().as_list()
+
+        W_xr = tf.get_variable(name="W_xr", shape=[input_size, self._num_units], initializer=tf.contrib.layers.variance_scaling_initializer())
+        W_xz = tf.get_variable(name="W_xz", shape=[input_size, self._num_units], initializer=tf.contrib.layers.variance_scaling_initializer())
+        W_xh = tf.get_variable(name="W_xh", shape=[input_size, self._num_units], initializer=tf.contrib.layers.variance_scaling_initializer())
+
+        W_hr = tf.get_variable(name="W_hr", shape=[self._num_units, self._num_units], initializer=tf.contrib.layers.variance_scaling_initializer())
+        W_hz = tf.get_variable(name="W_hz", shape=[self._num_units, self._num_units], initializer=tf.contrib.layers.variance_scaling_initializer())
+        W_hh = tf.get_variable(name="W_hh", shape=[self._num_units, self._num_units], initializer=tf.contrib.layers.variance_scaling_initializer())
+
+        b_r = tf.get_variable(name="b_r", shape=[self._num_units], initializer=tf.contrib.layers.variance_scaling_initializer())
+        b_z = tf.get_variable(name="b_z", shape=[self._num_units], initializer=tf.contrib.layers.variance_scaling_initializer())
+        b_h = tf.get_variable(name="b_h", shape=[self._num_units], initializer=tf.contrib.layers.variance_scaling_initializer())
+
+        r_t = tf.sign(tf.matmul(inputs,W_xr) + tf.matmul(state,W_hr) + b_r)
+        z_t = tf.sign(tf.matmul(inputs,W_xz) + tf.matmul(state,W_hz) + b_z)
+        h_hat_t = tf.tanh(tf.matmul(inputs,W_xh) + tf.matmul(r_t * state, W_hh) + b_h)
+
+        h_t = z_t * state + (1-z_t) * h_hat_t
+
+        return h_t, h_t
+
+
+multi_cell = MultiRNNCell([BasicLSTMCell(state_dim) for i in range(num_layers)])
+#multi_cell = MultiRNNCell([mygru(state_dim) for i in range(num_layers)])
+initial_state = multi_cell.zero_state(batch_size, dtype=tf.float32)
 
 # call seq2seq.rnn_decoder
+outputs, final_state = rnn_decoder(inputs, initial_state, multi_cell)
 
 # transform the list of state outputs to a list of logits.
 # use a linear transformation.
+weights = tf.get_variable(name="W", shape=[state_dim, vocab_size],
+    initializer=tf.contrib.layers.variance_scaling_initializer())
+bias = tf.get_variable(name="b", shape=[vocab_size],
+    initializer=tf.contrib.layers.variance_scaling_initializer())
+
+logits = [tf.matmul(o, weights) + bias for o in outputs]
 
 # call seq2seq.sequence_loss
+loss = sequence_loss(logits, targets, [1.0] * sequence_length)
 
 # create a training op using the Adam optimizer
+optim = tf.train.AdamOptimizer(name='adam').minimize(loss)
 
 # ------------------
 # YOUR SAMPLER GRAPH HERE
@@ -93,6 +123,14 @@ class mygru( RNNCell ):
 
 # remember, we want to reuse the parameters of the cell and whatever
 # parameters you used to transform state outputs to logits!
+
+s_inputs = tf.placeholder( tf.int32, [ 1 ], name="s_inputs")
+
+s_initial_state = multi_cell.zero_state(1.0, dtype=tf.float32)
+s_one_hot = tf.one_hot( s_inputs, vocab_size, name="s_input_onehot" )
+
+s_outputs, s_final_state = rnn_decoder([s_one_hot], s_initial_state, multi_cell)
+s_probs = [tf.matmul(o, weights) + bias for o in s_outputs]
 
 #
 # ==================================================================
@@ -138,8 +176,8 @@ def sample( num=200, prime='ab' ):
         # ...and get a vector of probabilities out!
 
         # now sample (or pick the argmax)
-        # sample = np.argmax( s_probsv[0] )
-        sample = np.random.choice( vocab_size, p=s_probsv[0] )
+        sample = np.argmax( s_probsv[0] ) ###
+        #sample = np.random.choice( vocab_size, p=s_probsv[0] )
 
         pred = data_loader.chars[sample]
         ret += pred
@@ -193,8 +231,9 @@ for j in range(1000):
 
     print sample( num=60, prime="And " )
 #    print sample( num=60, prime="ababab" )
-#    print sample( num=60, prime="foo ba" )
+#    print sample( num=60, prime="foo ba" ) ###
 #    print sample( num=60, prime="abcdab" )
+#    print sample(num=60, prime="def ")
 
 summary_writer.close()
 

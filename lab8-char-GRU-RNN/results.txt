@@ -1,0 +1,195 @@
+NOTE: I have implemented it as closely as I was able, and for some reason mygru does not train, while the built-in LSTM does. Thus I have provided examples with the built-in LSTM to show that the rest of my code is functional, after providing examples of what my code is doing.
+
+Also I appologize; having run it on my laptop, (and since I didn't have MYGRU working) I only ran short bouts.
+
+My own corpus of information was python_code.txt. It is a large conglomeration of a whole bunch of python code (mostly from the built-in libraries, with a mix of some other from work and perhaps even some tensorflow sources).
+
+
+------------------------------------------------------------------
+MYGRU on test1.txt:
+------------------------------------------------------------------
+984 0	2.1029
+foo ba      o  o oo  ooo ooo oo o  oo     o aooo oo oo fo oof    f
+985 0	2.0718
+foo ba  o  oo o      oo  o    o o r oo  oo    a  oo   oo o of   o 
+986 0	2.0580
+foo ba    o oo o o  o  o    fo o  oo              oo ooo        oo
+987 0	2.0903
+foo ba     oo  oo   o   o   o       o      o      oo       aooo  f
+988 0	2.0990
+foo ba     ooo   oo  ooo    ooooo   ooo   a oo oo   oo    oo  o  o
+989 0	2.0923
+foo ba    o o  oo     oooo    o  ooo  o o o   o  of o  o o  o  o  
+990 0	2.0626
+foo ba o o  o      o oo oo  ooo ooooo      o o oo   oooa   oo    o
+991 0	2.0901
+foo ba    o o o       o o o oo oo o   o ooo   ooo    oo oobo o   a
+992 0	2.0710
+foo ba   o  o     o oo oo oo  o       oo  oo ooo  o oo o   o   oo 
+993 0	2.0724
+foo bao  o     oo o o  ooo oo  o   o    o o o      oooo           
+994 0	2.0836
+foo bao     oo oo o   oo   o   oo o  oo  o    o  o booo oo     o  
+995 0	2.0886
+foo baoooo  oo     o            o    oo     o    f o    ooao o    
+996 0	2.0737
+foo ba o   oooo o  o ooo   o ooo  o          oo  o      ofo  f o  
+997 0	2.1004
+foo baoo  ooo    oooo     o        oo  oo     o  oooo  o       o  
+998 0	2.0650
+foo baoo oo  o       oo   oo    oo      oo  oo    a  o oo  o    o 
+999 0	2.0820
+foo bao    oo               o  oo oo o o oooo oob    o    of  o oo
+
+
+------------------------------------------------------------------
+MYGRU on alma.txt:
+------------------------------------------------------------------
+0 0	20.6877
+And oz1hotdmm.ubshdfi5ehhoet,tv,rfy
+lafaefLn,rdaenjvn1fni.yta1,o
+1 0	4.0741
+And ootooooettteeotaeottttetoooooooeaooeeoootoeaeooeoeaeooeoaooa
+2 0	3.8629
+And tooteeeeooeeeooeoooteeoeoeootooettoettoeteoototeetettetoeeot
+3 0	3.7144
+And eeeettteeoeteeotteoteteetteeeoooeeoeeeeeeeeeteteooeetteetoto
+4 0	3.5846
+And eeeeeeeeoeeeettteettteetteteeeetteeeeeettttoeaeottteeeeeetto
+5 0	3.4754
+And eeeeeeeeeeeeteeeeeteteeteteeeeeeteteeteetteoeoeeeeteeeteeeee
+6 0	3.3938
+And eeeeeeeeeeeeeeteeeeeeeeeteeteeeetteeeeeeeeeeeeeetteeeeeeeeee
+7 0	3.3228
+And eeeeeeeeeeeeeeeeeeeeeeeeeeteteeeee eeeeeeteeeeteeeteeeteeeee
+8 0	3.2652
+And eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeetteeeeeeeeeeeeeeeeeeeeteeee
+9 0	3.2128
+And eeeeeeeeeeeeeeeeeeeeeeeeee eeeeeeeee eeeeee eeeee eeeeeeeeee
+10 0	3.1749
+And eeeeeeeeeeeeee ee ee eeeeeee  eeeee eeee   eeee e  e  ee e  
+11 0	3.1423
+And   e ee        e  e e    e      e ee  e      ee  e e e   e   
+12 0	3.1142
+And                                                         e   
+13 0	3.0904
+And                                                  e          
+14 0	3.0735
+And                                                             
+
+
+------------------------------------------------------------------
+MYGRU on python_code.txt:
+------------------------------------------------------------------
+0 0	21.2256
+def n   nn nnn
+   n      n  nn 
+ 
+    
+ eed 
+   n   
+ nnn n nnen
+1 0	4.2373
+def                            n      e        
+  e ee          
+2 0	4.0014
+def                           e   e                          ee 
+3 0	3.8086
+def                                                             
+4 0	3.6589
+def                                                             
+5 0	3.5461
+def                                                             
+6 0	3.4605
+def                                                             
+7 0	3.4016
+def                                                             
+8 0	3.3560
+def                                                             
+9 0	3.3290
+def                                                             
+10 0	3.3117
+def                                                             
+11 0	3.3025
+def                                                             
+12 0	3.3012
+def                                                             
+13 0	3.3056
+def                                                             
+14 0	3.3084
+def                                                             
+15 0	3.3120
+
+
+------------------------------------------------------------------
+BUILT-IN LSTM on alma.txt:
+------------------------------------------------------------------
+0 0	4.2794
+And dd tee the the the the the the the the the the the the the t
+1 0	2.8101
+And the he and the the were the the were the the were the the we
+2 0	2.2930
+And the the pare the pare the pare the pare the pare the pare th
+3 0	2.0811
+And the were the were the were the were the were the were the we
+4 0	1.9350
+And on the were the were the were the were the were the were the
+5 0	1.8180
+And on the were the pore the were the pore the were the pore the
+6 0	1.7261
+And on the were the pore the wis the pore the wis the pore the w
+7 0	1.6529
+And on the were the people of the were the people of the were th
+8 0	1.5890
+And on the people of the words of the words of the words of the 
+9 0	1.5331
+And on the people of the words of the words of the words of the 
+10 0	1.4829
+And the were of the words of the words of the words of the words
+11 0	1.4389
+And the were of the land of the words of the words of the words 
+12 0	1.3996
+And the were of the land of the words of the words of the words 
+13 0	1.3640
+And the were of the land of the words of the words of the words 
+14 0	1.3309
+And the were of the land of the words of the words of the words 
+
+
+------------------------------------------------------------------
+BUILT-IN LSTM on python_code.txt:
+------------------------------------------------------------------
+0 0	4.6218
+def cettertsertsertsesetsetsetsetsetsetsetsetsetsetsetsetsetsets
+1 0	2.8844
+def fordes:
+                                                    
+2 0	2.4665
+def ord self._name_stor_self._cort_self)
+                       
+3 0	2.2673
+def or the stars and the and the the the the the the the the the
+4 0	2.1271
+def =                                                           
+5 0	2.0228
+def =                                                           
+6 0	1.9338
+def =                                                           
+7 0	1.8561
+def =                                                           
+8 0	1.7909
+def =                                                           
+9 0	1.7410
+def =                                                           
+10 0	1.6812
+def argmate_dist_name)
+        return self.get_close(self._compr
+11 0	1.6374
+def arguments = self._compress_tag_string_string_string_file(sel
+12 0	1.5944
+def arguments in the string or the string of the string of the s
+13 0	1.5532
+def arguments in the string or the string of the string of the s
+14 0	1.5166
+def arguments in the string or the string of the string of the s
+
