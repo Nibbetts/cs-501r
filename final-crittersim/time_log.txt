@@ -1,0 +1,49 @@
+Total: 31 hrs.
+
+Research on pygame/pyglet:
+    30 min
+    1 hr
+    30 min
+    30 min
+
+Sprite Design:
+    30 min
+    20 min
+    30 min
+
+Planning/Design for NN archtectures:
+    40 min
+    30 min
+    1 hr
+
+Simulator Programming:
+    5 hrs 30 min
+    1 hr 30 min
+
+Simulator Debugging:
+    2 hrs 15 min
+    2 hrs
+
+Environment balancing:
+    30 min
+
+Getting Visuals & Controls working:
+    1 hr 30 min
+    3 hrs
+
+Randomized critter Programming:
+    1 hr 30 min
+    45 min
+
+Player-controlled critter Programming:
+    45 min
+    45 min
+
+Trying to connect parts for NN to use/debugging:
+    2 hrs
+
+Report diagrams and specific NN plans:
+    2 hrs 
+
+Report Writing:
+    1 hr 30 min
